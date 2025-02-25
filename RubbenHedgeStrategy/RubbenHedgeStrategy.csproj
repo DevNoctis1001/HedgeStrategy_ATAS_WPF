@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <Target Name ="CopyOutputDll" AfterTargets="Build">
+    <PropertyGroup>
+      <OutputDirectory>C:\Users\MetStar\Documents\ATAS\Strategies\</OutputDirectory>
+    </PropertyGroup>
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(OutputDirectory)$(AssemblyName).dll"></Copy>
+  </Target>
+
+  
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+  </ItemGroup>
+  <ItemGroup>
+    
+    <Reference Include="ATAS.DataFeedsCore">
+      <HintPath>C:\Program Files (x86)\ATAS Platform\ATAS.DataFeedsCore.dll</HintPath>
+    </Reference>
+    <Reference Include="ATAS.Indicators">
+      <HintPath>C:\Program Files (x86)\ATAS Platform\ATAS.Indicators.dll</HintPath>
+    </Reference>
+    <Reference Include="ATAS.Strategies">
+      <HintPath>C:\Program Files (x86)\ATAS Platform\ATAS.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="OFT.Localization">
+      <HintPath>C:\Program Files (x86)\ATAS Platform\OFT.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.Common">
+      <HintPath>C:\Program Files (x86)\ATAS Platform\Utils.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
