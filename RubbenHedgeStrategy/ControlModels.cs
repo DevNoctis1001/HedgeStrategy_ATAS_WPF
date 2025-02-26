@@ -296,22 +296,22 @@ namespace RubbenHedgeStrategy
             _closeTime3 = DateTime.Now.AddMinutes(20).TimeOfDay.ToString("hh\\:mm\\:ss");
             _closeTime4 = DateTime.Now.AddMinutes(20).TimeOfDay.ToString("hh\\:mm\\:ss");
 
-            _amount1 = 0.01m;
-            _price1 = 94400m;
-            _stoploss1 = 0.1m;
+            _amount1 = 1m;
+            _price1 = 88000m;
+            _stoploss1 = 0.3m;
             _breakeven1 =0.1m;
 
-            _amount2 = 0.02m;
-            _price2 = 94320m;
-            _stoploss2 = 0.1m;
+            _amount2 = 2m;
+            _price2 = 87200m;
+            _stoploss2 = 0.3m;
             _breakeven2 = 0.1m;
 
-            _amount3 = 0.03m;
+            _amount3 = 3m;
             _price3 = 95500m;
             _stoploss3 = 0.1m;
             _breakeven3 = 0.1m;
 
-            _amount4 = 0.04m;
+            _amount4 = 4m;
             _price4 = 95450;
             _stoploss4 = 0.1m;
             _breakeven4 = 0.1m;

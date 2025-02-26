@@ -71,8 +71,9 @@ namespace RubbenHedgeStrategy
                 //GlobalVariables.isActiveOrder3 = false;
                 //GlobalVariables.isActiveOrder4 = false;
                 StartButton.Content = "Start";
-                _rubbenHedge.CloseCurrentPosition();
-                _rubbenHedge.CloseCurrentOrders();
+                _rubbenHedge.ActiveStop();
+                //_rubbenHedge.CloseCurrentPosition();
+                //_rubbenHedge.CloseCurrentOrders();
             }
             ControlModels.IsStrategyActive = !ControlModels.IsStrategyActive;
         }
@@ -165,7 +166,7 @@ namespace RubbenHedgeStrategy
 
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
-            //_rubbenHedge.Test();
+            _rubbenHedge.Test();
         }
     }
 }
