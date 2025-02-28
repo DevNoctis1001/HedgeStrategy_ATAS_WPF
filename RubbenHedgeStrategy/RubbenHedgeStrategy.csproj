@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
-  <Target Name ="CopyOutputDll" AfterTargets="Build">
+  <Target Name="CopyOutputDll" AfterTargets="Build">
     <PropertyGroup>
       <OutputDirectory>C:\Users\MetStar\Documents\ATAS\Strategies\</OutputDirectory>
     </PropertyGroup>
@@ -17,6 +17,11 @@
   
   <ItemGroup>
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     

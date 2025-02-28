@@ -46,6 +46,7 @@ namespace RubbenHedgeStrategy
         private decimal[] BreakEven = new decimal[4];
         private string[] CloseDate = new string[4];
         private string[] CloseTime = new string[4];
+        
 
         private bool isActivateOrder = false;
         //private bool[] isActivateOrder = new bool[4];
@@ -64,7 +65,7 @@ namespace RubbenHedgeStrategy
         private decimal currentTriggerPrice = -1;
         private bool isFirstBreakEven = true;
 
-
+        private bool flag = false;
         public RubbenHedge()
         {
             currentBE = -1;
@@ -74,6 +75,7 @@ namespace RubbenHedgeStrategy
             currentTriggerPrice = -1;
             MainOrder = null;
             SLOrder = null;
+            flag = false;
             //GlobalVariablesTemp.isShowControlPanel= false;
         }
 
@@ -128,7 +130,7 @@ namespace RubbenHedgeStrategy
             DateTime dateTime = ValidateDate(CloseDate[index] + " " + CloseTime[index]);
             if (dateTime == DateTime.MinValue)
             {
-                this.LogInfo("Here is DateTime"); return;
+                return;
             }
             try
             {
@@ -138,7 +140,7 @@ namespace RubbenHedgeStrategy
                     currentTriggerPrice = Type[index] == "Market" ? CurrentPrice : (Side[index] == "Buy" ? BestBidPrice : BestBidPrice);
                     decimal slPrice = Side[index] == "Buy" ? (currentTriggerPrice * (1 - StopLoss[index] / 100)) : (currentTriggerPrice * (1 + StopLoss[index] / 100));
                     currentConsideringID = index;
-                    this.LogInfo($"Index: {index} slPrice:{slPrice} executePrice: {currentTriggerPrice} CurrentPrice:{currentTriggerPrice} BestBidPrice:{BestBidPrice} BestAskPrice:{BestAskPrice}");
+                    //this.LogInfo($"Index: {index} slPrice:{slPrice} executePrice: {currentTriggerPrice} CurrentPrice:{currentTriggerPrice} BestBidPrice:{BestBidPrice} BestAskPrice:{BestAskPrice}");
                     //decimal = 
                     if (Type[index] == "Market")
                     {
@@ -190,27 +192,11 @@ namespace RubbenHedgeStrategy
 
 
         }
-        public  void Test()
+        public  void CloseAllPosition()
         {
             try
             {
-                //Order order = new Order
-                //{
-                //    QuantityToFill = 1m,
-                //    //TriggerPrice = currentTriggerPrice,
-                //    Type = OrderTypes.Market,
-                //    Portfolio = Portfolio,
-                //    Security = Security,
-                //    //ExpiryDate = dateTime,
-                //    Direction = OrderDirections.Sell
-
-                //};
-                //MainOrderID = order.ExtId;
-                //Task.Factory.StartNew(async() =>
-                //{
-                //    await TradingManager!.OpenOrderAsync(order,false,false).ConfigureAwait(false);
-                //});
-                //await TradingManager!.SetStopLoss(new PriceUnit(0.5m, PriceUnitTypes.Percent));
+                TradingManager.ClosePositionAsync(TradingManager.Position, false,false);
             }
             catch (Exception e) {
                 this.LogInfo($"Test exception {e.Message}");
@@ -219,9 +205,12 @@ namespace RubbenHedgeStrategy
         } 
         protected override void  OnPositionChanged(Position position)
         {
-            
-            base.OnPositionChanged(position);
 
+            if (controlPanel != null)
+            {
+                controlPanel.ControlModels.UnPNL = position.UnrealizedPnL;
+                controlPanel.ControlModels.Quantity = position.Volume;
+            }
             if (position.Volume==0)
             {
                 isActivateOrder=false;
@@ -231,10 +220,16 @@ namespace RubbenHedgeStrategy
                 return;
             }
             if (currentBE == -1) return;
-            this.LogInfo($"@@@ Position volume: {position.Volume} UnrealizedPNL:{position.UnrealizedPnL} expected price : {(position.AveragePrice * Math.Abs(position.Volume) * currentBE / 100)} Balance:{this.Portfolio.Balance}");
+
+            //this.LogInfo($"@@@ expected price : {(position.AveragePrice * Math.Abs(position.Volume) * currentBE / 100)} Balance:{this.Portfolio.Balance}");
+            if(position.UnrealizedPnL<-(this.Portfolio.Balance*controlPanel!.ControlModels.Maxdrawdown/100))
+            {
+                CloseAllPosition();
+                return;
+            }
             if (position.UnrealizedPnL >= (position.AveragePrice * Math.Abs(position.Volume) * currentBE / 100) && isFirstBreakEven)
             {
-                this.LogInfo("Yes: BreakEven");
+                //this.LogInfo("Yes: BreakEven");
                 try
                 {
                     isFirstBreakEven = false;
@@ -245,28 +240,8 @@ namespace RubbenHedgeStrategy
                     this.LogInfo($"BreakEven Error: {e.Message}");
                 }
             }
-        }
-        //    if(CurrentPosition == 0 )
-        //    {
-        //        isActivateOrder = false;
-        //        currentConsideringID = -1;
-        //    }
-        //    this.LogInfo($"UnrealizedPnl: {position.UnrealizedPnL}  Calc:{(position.AveragePrice * Math.Abs(position.Volume) * BreakEven[currentConsideringID] / 100)} AveragePrice: {position.AveragePrice} Volume : {position.Volume} BreakEven: 0.1");
-        //    if (position.UnrealizedPnL >= (position.AveragePrice * Math.Abs(position.Volume )* BreakEven[currentConsideringID] / 100) && isFirstBreakEven)
-        //    {
-        //        this.LogInfo("Yes: BreakEven");
-        //        try
-        //        {
-        //            //await TradingManager!.SetBreakeven();
-        //        }
-        //        catch(Exception e)
-        //        {
-        //            this.LogInfo($"BreakEven Error: {e.Message}");
-        //        }
-        //        isFirstBreakEven = false;
-        //    } 
-        //}
-
+            base.OnPositionChanged(position);
+        } 
 
         //private void TrySetReduceOnly(Order order)
         //{
@@ -283,18 +258,41 @@ namespace RubbenHedgeStrategy
         //}
         protected override void OnCalculate(int bar, decimal value)
         {
-            
+
+            if (flag == false)
+            {
+                Task.Factory.StartNew(static () =>
+                {
+                    try
+                    {
+
+                        socket_client socket_Client = new socket_client();
+                        socket_Client.start();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //Core.Instance.Loggers.Log("Test", $"Onit exception: {ex.Message}", LoggingLevel.Trading);
+                    }
+
+                });
+                flag = true;
+            }
             currentPrice  = value;  
             decimal BestAskPrice = this.BestAsk.Price;
-            decimal BestBidPrice = this.BestBid.Price; 
+            decimal BestBidPrice = this.BestBid.Price;
+            
             //this.LogInfo($"AskPrice: {BestAskPrice}  BidPrice:{BestBidPrice}  CurrentPrice : {currentPrice}");
             //return;
             if (controlPanel != null)
             {
                 ControlModels controlModels = controlPanel.ControlModels;
+                controlModels.CurrentPrice = currentPrice;
+                controlModels.BestAskPrice = BestAskPrice;
+                controlModels.BestBidPrice = BestBidPrice;
                 //MessageBox.Show($"{controlModels.IsStrategyActive}");
                 if (controlModels.IsStrategyActive != true) return;
-                this.LogInfo($"-----isActivateOrder: {isActivateOrder}  currentConsideringId: {currentConsideringID} CurrentPrice:{currentPrice}" );
+                //this.LogInfo($"-----isActivateOrder: {isActivateOrder}  currentConsideringId: {currentConsideringID} CurrentPrice:{currentPrice}" );
                 if (controlModels.Enable1 && isActivateOrder == false && currentConsideringID == -1)
                 {
                     Amount[0] = controlModels.Amount1;
@@ -333,8 +331,11 @@ namespace RubbenHedgeStrategy
             currentSL = -1;
             isActivateOrder = false;
             currentConsideringID = -1;
-            Position? position = TradingManager!.Position;
-            TradingManager!.ClosePositionAsync(position,false, false).Wait(); 
+            Task.Factory.StartNew(() =>
+            {
+                Position? position = TradingManager!.Position;
+                TradingManager!.ClosePositionAsync(position,false, false).Wait(); 
+            });
         } 
         protected override void OnStarted()
         {

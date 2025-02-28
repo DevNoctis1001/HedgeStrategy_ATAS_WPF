@@ -164,9 +164,11 @@ namespace RubbenHedgeStrategy
         //    Reset_4();
         //}
 
-        private void TestButton_Click(object sender, RoutedEventArgs e)
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            _rubbenHedge.Test();
+
+            _rubbenHedge.CloseAllPosition();
         }
     }
 }

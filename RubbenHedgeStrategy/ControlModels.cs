@@ -251,6 +251,13 @@ namespace RubbenHedgeStrategy
 
         // -------------- Textbox Maxdrawdown --------------------//
         private decimal _maxdrawdown =5;
+        private decimal _currentPrice;
+        private decimal _bestAskPrice;
+        private decimal _bestBidPrice;
+        private decimal _unPNL;
+        private decimal _quantity;
+
+
 
         // -------------- Label StrategyStatus --------------------//
         private bool _isStrategyActive;
@@ -324,6 +331,8 @@ namespace RubbenHedgeStrategy
             _enable4 = true;
 
             _isStrategyActive= false;
+
+
 
         }
         public decimal Price1
@@ -715,6 +724,70 @@ namespace RubbenHedgeStrategy
                 {
                     _isStrategyActive = value;
                     OnPropertyChanged(nameof(IsStrategyActive));
+                }
+            }
+        }
+
+        public decimal CurrentPrice
+        {
+            get => _currentPrice;
+            set
+            {
+                if(_currentPrice != value)
+                {
+                    _currentPrice = value;
+                    OnPropertyChanged(nameof(CurrentPrice));
+                }
+            }
+        }
+
+        public decimal BestAskPrice
+        {
+            get => _bestAskPrice;
+            set
+            {
+                if (value != _bestAskPrice)
+                {
+                    _bestAskPrice = value;
+                    OnPropertyChanged(nameof(BestAskPrice));
+                }
+            }
+        }
+
+        public decimal BestBidPrice
+        {
+            get => _bestBidPrice;
+            set
+            {
+                if (value != _bestBidPrice)
+                {
+                    _bestBidPrice = value;
+                    OnPropertyChanged(nameof(BestBidPrice));
+                }
+            }
+        }
+        public decimal UnPNL
+        {
+            get => _unPNL;
+            set
+            {
+                if (value != _unPNL)
+                {
+                    _unPNL = value;
+                    OnPropertyChanged(nameof(UnPNL));
+                }
+            }
+        }
+
+        public decimal Quantity
+        {
+            get => _quantity;
+            set
+            {
+                if (_quantity != value)
+                {
+                    _quantity = value;
+                    OnPropertyChanged(nameof(Quantity));
                 }
             }
         }

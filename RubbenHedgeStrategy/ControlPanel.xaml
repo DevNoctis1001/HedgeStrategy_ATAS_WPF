@@ -9,7 +9,7 @@
         
         mc:Ignorable="d"
         
-        Title="ControlPanel" Height="192" Width="1200" WindowStartupLocation="CenterScreen" Topmost="True">
+        Title="ControlPanel" Height="192" Width="1300" WindowStartupLocation="CenterScreen" Topmost="True">
     <Window.Resources>
         <local:BoolToStatusConverter x:Key="BoolToStatusConvert"/>
     </Window.Resources>
@@ -25,9 +25,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="1.3*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="1.3*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.3*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="*"/>
@@ -43,7 +43,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="White" 
                HorizontalAlignment="Right" Margin="5,0,5,0" >Price1:</Label>
         <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Foreground="White" 
@@ -53,10 +53,10 @@
                  Margin="5,0,5,0" Foreground="#FFF3E6E6" TextAlignment="Right" Text="{Binding Price1,  Mode=OneWay}"/>
         <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Background="Transparent" Name="Text_Price2" 
                  Margin="5,0,5,0" Foreground="#FFF3E6E6" TextAlignment="Right" Text="{Binding Price2,  Mode=OneWay}"/>
-        
+
         <Label Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right">Amount:</Label>
         <Label Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right">Amount:</Label>
-        
+
         <TextBox Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Background="Transparent" Name="Text_Amount1" 
                  Margin="5,0,5,0" Foreground="#FFF3E6E6" TextAlignment="Right" Text="{Binding Amount1,  Mode=OneWay}"/>
         <TextBox Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Background="Transparent" Name="Text_Amount2" 
@@ -117,8 +117,8 @@
         <TextBox Grid.Row="1" Grid.Column="16" VerticalAlignment="Center" Background="Transparent" Name="Text_Time2" Margin="5,0,5,0" 
                  Foreground="White" TextAlignment="Right" Text="{Binding CloseTime2, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
 
-        <Button Grid.Row="0" Grid.Column="17" VerticalAlignment="Center" Name="Button_Reset1" Click="Button_Reset1_Click">RESET</Button>
-        <Button Grid.Row="1" Grid.Column="17" VerticalAlignment="Center" Name="Button_Reset2" Click="Button_Reset2_Click" >RESET</Button>
+        <Button Grid.Row="0" Grid.Column="17" VerticalAlignment="Center" Name="Button_Reset1" Click="Button_Reset1_Click" Margin="6,0,6,0">RESET</Button>
+        <Button Grid.Row="1" Grid.Column="17" VerticalAlignment="Center" Name="Button_Reset2" Click="Button_Reset2_Click" Margin="6,0,6,0" >RESET</Button>
 
         <Label Grid.Row="0" Grid.Column="18" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="5,0,5,0">Enable:</Label>
         <Label Grid.Row="1" Grid.Column="18" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="5,0,5,0">Enable:</Label>
@@ -201,13 +201,28 @@
         <CheckBox Grid.Row="3" Grid.Column="19" VerticalAlignment="Center" IsChecked="{Binding Enable4}" HorizontalAlignment="Center" 
                   Name="Checkbox_Enable4" Margin="5,0,5,0"></CheckBox>
         -->
+        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right" Content="Current: " Margin="6,0,0,6"/>
+        <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Left" Content="{Binding CurrentPrice, Mode=TwoWay}"  Margin="6,0,0,6"/>
+
+        <Label Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right" Content="BestAsk: " Margin="6,0,0,6"/>
+        <Label Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Left" Content="{Binding BestAskPrice, Mode=TwoWay}" Margin="6,0,0,6"/>
+
+        <Label Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right" Content="BestBid: "  Margin="6,0,0,6"/>
+        <Label Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Left" Content="{Binding BestBidPrice, Mode=TwoWay}" Margin="6,0,0,6"/>
+
+        <Label Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right" Content="Quantity: "  Margin="6,0,0,6"/>
+        <Label Grid.Row="2" Grid.Column="7" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Left" Content="{Binding Quantity, Mode=TwoWay}"  Margin="6,0,0,6"/>
+
+        <Label Grid.Row="2" Grid.Column="8" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right" Content="UnPNL: "  Margin="6,0,0,6"/>
+        <Label Grid.Row="2" Grid.Column="9" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Left" Content="{Binding UnPNL, Mode=TwoWay}"  Margin="6,0,0,6"/>
+
         <Label Grid.Row="2" Grid.Column="16" Grid.ColumnSpan="2" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Right">Max DrawDown:</Label>
         <TextBox Grid.Row="2" Grid.Column="18" VerticalAlignment="Center" Background="Transparent" Name="Text_MaxDrawDown" 
                  Margin="5,0,5,0" Foreground="White" TextAlignment="Center" Text="{Binding Maxdrawdown,  Mode=TwoWay}"/>
         <Label Grid.Row="2" Grid.Column="19" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center">%</Label>
-        <Button Grid.Row="2" Grid.Column="6" Grid.ColumnSpan="2" Name ="TestButton" VerticalAlignment="Center" Click="TestButton_Click" >Test</Button>
-        <Button Grid.Row="2" Grid.Column="10" Grid.ColumnSpan="2" Name ="StartButton" VerticalAlignment="Center" Click="StartButton_Click">Start</Button>
-        <Label Grid.Row="2" Grid.Column="12" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" 
+        <Button Grid.Row="2" Grid.Column="10" Grid.ColumnSpan="2" Name ="CloseButton" VerticalAlignment="Center" Margin="6,0,6,0" Click="CloseButton_Click" >CloseAll</Button>
+        <Button Grid.Row="2" Grid.Column="12" Grid.ColumnSpan="2" Name ="StartButton" VerticalAlignment="Center" Click="StartButton_Click" Margin="6,0,6,0">Start</Button>
+        <Label Grid.Row="2" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" 
                Content="{Binding IsStrategyActive, Converter={StaticResource BoolToStatusConvert}}" Foreground="White"></Label>
 
 
